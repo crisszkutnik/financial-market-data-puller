@@ -5,7 +5,7 @@ val Http4sVersion = "0.23.28"
 val CirceVersion = "0.14.9"
 val MunitVersion = "1.0.2"
 val LogbackVersion = "1.5.9"
-val MunitCatsEffectVersion = "2.0.0"
+val MunitCatsEffectVersion = "2.0-5e03bfc"
 
 lazy val buildDockerImage = taskKey[Unit]("Build Docker image for project")
 
