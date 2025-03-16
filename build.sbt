@@ -43,7 +43,7 @@ lazy val root = (project in file("."))
       "org.apache.poi" % "poi-ooxml-lite" % "5.3.0"
     ),
     libraryDependencies ++= Seq(
-      "io.circe" %% "circe-generic" % "0.14.10",
+      "io.circe" %% "circe-generic" % "0.14.11",
       "io.circe" %% "circe-literal" % "0.14.10"
     ),
     libraryDependencies ++= Seq(
