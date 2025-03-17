@@ -44,7 +44,7 @@ lazy val root = (project in file("."))
     ),
     libraryDependencies ++= Seq(
       "io.circe" %% "circe-generic" % "0.14.12",
-      "io.circe" %% "circe-literal" % "0.14.11"
+      "io.circe" %% "circe-literal" % "0.14.12"
     ),
     libraryDependencies ++= Seq(
       "io.prometheus" % "prometheus-metrics-core" % "1.3.6",
