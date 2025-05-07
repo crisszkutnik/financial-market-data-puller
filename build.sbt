@@ -3,7 +3,7 @@ import scala.sys.process.*
 
 val Http4sVersion = "0.23.30"
 val CirceVersion = "0.14.9"
-val MunitVersion = "1.0.4"
+val MunitVersion = "1.1.1"
 val LogbackVersion = "1.5.18"
 val MunitCatsEffectVersion = "2.0.0"
 
