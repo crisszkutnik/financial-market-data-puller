@@ -49,7 +49,7 @@ lazy val root = (project in file("."))
     libraryDependencies ++= Seq(
       "io.prometheus" % "prometheus-metrics-core" % "1.3.7",
       "io.prometheus" % "prometheus-metrics-instrumentation-jvm" % "1.3.6",
-      "io.prometheus" % "prometheus-metrics-exporter-httpserver" % "1.3.6",
+      "io.prometheus" % "prometheus-metrics-exporter-httpserver" % "1.3.7",
     ),
     libraryDependencies += "org.xerial" % "sqlite-jdbc" % "3.47.2.0",
     assembly / assemblyMergeStrategy := {
