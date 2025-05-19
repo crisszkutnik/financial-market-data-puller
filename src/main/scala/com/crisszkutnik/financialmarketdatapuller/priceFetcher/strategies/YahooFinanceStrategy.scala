@@ -66,7 +66,9 @@ class YahooFinanceStrategy(
 
     // chart.result[0].meta.currency
     val currency = (((json("chart").obj)("result").arr.head)("meta").obj)("currency").str
-    val enumVal = Currency.valueOf(currency)
+    // Some tickers have a blank currency field. Assume it is USD
+    // TODO: Make currency an optional field
+    val enumVal = Try(Currency.valueOf(currency)).getOrElse(Currency.USD)
 
     (value, enumVal)
 
