@@ -36,7 +36,7 @@ lazy val root = (project in file("."))
     libraryDependencies += "org.jsoup" % "jsoup" % "1.18.3",
     libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
     libraryDependencies += "org.apache.logging.log4j" % "log4j-core" % "2.24.3",
-    libraryDependencies += "com.lihaoyi" %% "upickle" % "4.0.2",
+    libraryDependencies += "com.lihaoyi" %% "upickle" % "4.2.1",
     libraryDependencies ++= Seq(
       "org.apache.poi" % "poi" % "5.3.0",
       "org.apache.poi" % "poi-ooxml" % "5.3.0",
