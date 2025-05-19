@@ -10,19 +10,10 @@ on:
 
 jobs:
   tag:
-    runs-on: ubuntu-latest
+    uses: crisszkutnik/gh-actions/.github/workflows/tag-js.yaml@main
+    with:
+      semver: ${{ inputs.semver }}
     permissions:
       contents: write
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          # A custom token has to be used so this workflow can trigger the create-release workflow
-          # see: https://github.com/orgs/community/discussions/27028#discussioncomment-3254360
-          token: ${{ secrets.ACTIONS_PERSONAL_ACCESS_TOKEN }}
-      - run: git config --global user.name "GitHub Actions bot"
-      - run: git config --global user.email "<>"
-      - run: git fetch --prune --unshallow --tags
-      - run: git commit -m "${{ inputs.version }}" --allow-empty
-      - run: git tag -a -m "${{ inputs.version }}" ${{ inputs.version }}
-      - run: git push --follow-tags
+    secrets:
+      ACTIONS_PERSONAL_ACCESS_TOKEN: ${{ secrets.ACTIONS_PERSONAL_ACCESS_TOKEN }}
