@@ -3,7 +3,7 @@ name: Create tag
 on:
   workflow_dispatch:
     inputs:
-      version:
+      semver:
         description: "The tag version it is going to be created. Please make sure version number starts with 'v' (for example: v1.0.0, v2.1.2, etc.)"
         required: true
         type: "string"
