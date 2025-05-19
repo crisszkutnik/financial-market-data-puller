@@ -10,7 +10,7 @@ on:
 
 jobs:
   tag:
-    uses: crisszkutnik/gh-actions/.github/workflows/tag-js.yaml@main
+    uses: crisszkutnik/gh-actions/.github/workflows/tag.yaml@main
     with:
       semver: ${{ inputs.semver }}
     permissions:
