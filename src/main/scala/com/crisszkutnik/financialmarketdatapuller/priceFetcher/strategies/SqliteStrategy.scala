@@ -60,13 +60,16 @@ object SqliteStrategy:
   def insertInfo(market: Market, ticker: String, assetType: Option[AssetType], tpi: TickerPriceInfo): Try[Unit] =
     Using(connection.createStatement()) { stmt =>
       val mkt = market.toString
-      val fullAssetPriceParam = parseAssetType(assetType)
+      val parsedAssetType = assetType match {
+        case Some(at) => s"'$at'"
+        case None => s"NULL"
+      }
       val currency = tpi.currency.toString
       val timestamp = System.currentTimeMillis()
       val value = tpi.value
       val uftp = tpi.unitsForTickerPrice
 
-      val query = s"INSERT INTO prices VALUES ('$ticker', '$mkt', $fullAssetPriceParam, $value, $uftp, '$currency', $timestamp)"
+      val query = s"INSERT INTO prices VALUES ('$ticker', '$mkt', $parsedAssetType, $value, $uftp, '$currency', $timestamp)"
 
       stmt.executeUpdate(query)
       ()
@@ -75,9 +78,9 @@ object SqliteStrategy:
   def getInfo(market: Market, ticker: String, assetType: Option[AssetType]): Try[Option[TickerPriceInfo]] =
     Using(connection.createStatement()) { stmt =>
       val mkt = market.toString
-      val fullAssetPriceParam = parseAssetType(assetType)
+      val fullAssetTypeStatement = preparseAssetTypeStatement(assetType)
 
-      val query = s"SELECT * FROM prices WHERE market='$mkt' AND ticker='$ticker' AND assetType=$fullAssetPriceParam LIMIT 1"
+      val query = s"SELECT * FROM prices WHERE market='$mkt' AND ticker='$ticker' AND $fullAssetTypeStatement LIMIT 1"
 
       val rs = stmt.executeQuery(query)
 
@@ -107,12 +110,10 @@ object SqliteStrategy:
     val mkt = entry.getString("market")
     val assetType = entry.getString("assetType")
 
-    val fullAssetTypeParam = assetType match
-      case null => s"NULL"
-      case _ => s"'$assetType'"
+    val fullAssetTypeStatement = preparseAssetTypeStatement(Option(AssetType.valueOf(assetType)))
 
     stmt.executeUpdate(
-      s"DELETE FROM prices WHERE market='$mkt' AND ticker='$ticker' AND assetType=$fullAssetTypeParam"
+      s"DELETE FROM prices WHERE market='$mkt' AND ticker='$ticker' AND $fullAssetTypeStatement"
     )
     ()
 
@@ -123,9 +124,9 @@ object SqliteStrategy:
     currentTime >= timestamp + Config.SQLITE_CACHE_EXPIRE_TIME_MS
 
   // Will include ''
-  private def parseAssetType(assetType: Option[AssetType]) =
+  private def preparseAssetTypeStatement(assetType: Option[AssetType]) =
     assetType match
       case Some(v) =>
         val str = v.toString
-        s"'$str'"
-      case None => s"NULL"
+        s"assetType='$str'"
+      case None => s"assetType IS NULL"
