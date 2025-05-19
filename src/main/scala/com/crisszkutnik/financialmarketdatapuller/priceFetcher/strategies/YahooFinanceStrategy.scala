@@ -3,6 +3,7 @@ package com.crisszkutnik.financialmarketdatapuller.priceFetcher.strategies
 import com.crisszkutnik.financialmarketdatapuller.priceFetcher.exceptions.TickerNotFoundException
 import com.crisszkutnik.financialmarketdatapuller.priceFetcher.{AssetType, Currency, Market, Source, TickerPriceInfo}
 import com.typesafe.scalalogging.Logger
+import io.prometheus.metrics.core.metrics.Counter
 import sttp.client4.quick.*
 import sttp.model.StatusCode
 
@@ -11,6 +12,20 @@ import scala.util.Try
 class YahooFinanceStrategy(
   private val logger: Logger = Logger[YahooFinanceStrategy]
 ) extends PriceFetcher:
+  private lazy val yfinanceRequestsFailedCounter = Counter
+    .builder()
+    .name("yahoo_finance_requests_failed")
+    .help("Amount of Yahoo Finance requests that fail")
+    .labelNames("ticker", "statusCode")
+    .register()
+
+  private val headers: Map[String, String] = Map(
+    "User-Agent" -> "PostmanRuntime/7.43.4",
+    "Accept" -> "*/*",
+    "Accept-Encoding" -> "gzip, deflate, br",
+    "Cache-Control" -> "max-age=0"
+  )
+
   val source: Source = Source.YAHOOFINANCE
 
   def canHandle(market: Market, ticker: String, assetType: AssetType): Boolean =
@@ -33,10 +48,13 @@ class YahooFinanceStrategy(
     try {
       val response = quickRequest
         .get(uri"https://query1.finance.yahoo.com/v8/finance/chart/${ticker}")
+        .headers(headers)
         .send()
 
-      if response.code != StatusCode.Ok then
-        throw Exception("Ticker not found")
+      if response.code != StatusCode.Ok then {
+        yfinanceRequestsFailedCounter.labelValues(ticker, response.code).inc()
+        throw TickerNotFoundException(source, ticker)
+      }
 
       ujson.read(response.body)
     } catch
