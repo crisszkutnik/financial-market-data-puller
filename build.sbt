@@ -3,9 +3,9 @@ import scala.sys.process.*
 
 val Http4sVersion = "0.23.30"
 val CirceVersion = "0.14.9"
-val MunitVersion = "1.0.4"
+val MunitVersion = "1.1.1"
 val LogbackVersion = "1.5.18"
-val MunitCatsEffectVersion = "2.0.0"
+val MunitCatsEffectVersion = "2.1.0"
 
 lazy val buildDockerImage = taskKey[Unit]("Build Docker image for project")
 
@@ -33,14 +33,14 @@ lazy val root = (project in file("."))
       "ch.qos.logback"  %  "logback-classic"     % LogbackVersion         % Runtime,
     ),
     libraryDependencies += "com.softwaremill.sttp.client4" %% "core" % "4.0.7",
-    libraryDependencies += "org.jsoup" % "jsoup" % "1.18.3",
+    libraryDependencies += "org.jsoup" % "jsoup" % "1.20.1",
     libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
     libraryDependencies += "org.apache.logging.log4j" % "log4j-core" % "2.24.3",
-    libraryDependencies += "com.lihaoyi" %% "upickle" % "4.0.2",
+    libraryDependencies += "com.lihaoyi" %% "upickle" % "4.2.1",
     libraryDependencies ++= Seq(
-      "org.apache.poi" % "poi" % "5.3.0",
-      "org.apache.poi" % "poi-ooxml" % "5.3.0",
-      "org.apache.poi" % "poi-ooxml-lite" % "5.3.0"
+      "org.apache.poi" % "poi" % "5.4.1",
+      "org.apache.poi" % "poi-ooxml" % "5.4.1",
+      "org.apache.poi" % "poi-ooxml-lite" % "5.4.1"
     ),
     libraryDependencies ++= Seq(
       "io.circe" %% "circe-generic" % "0.14.13",
@@ -51,7 +51,7 @@ lazy val root = (project in file("."))
       "io.prometheus" % "prometheus-metrics-instrumentation-jvm" % "1.3.7",
       "io.prometheus" % "prometheus-metrics-exporter-httpserver" % "1.3.7",
     ),
-    libraryDependencies += "org.xerial" % "sqlite-jdbc" % "3.47.2.0",
+    libraryDependencies += "org.xerial" % "sqlite-jdbc" % "3.49.1.0",
     assembly / assemblyMergeStrategy := {
       case PathList("META-INF", x, xs @ _*) if x.toLowerCase == "services" => MergeStrategy.filterDistinctLines
       case PathList("META-INF", xs @ _*) => MergeStrategy.discard
