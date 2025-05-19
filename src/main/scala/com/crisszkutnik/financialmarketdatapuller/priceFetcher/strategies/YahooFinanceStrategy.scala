@@ -47,7 +47,7 @@ class YahooFinanceStrategy(
 
       if response.code != StatusCode.Ok then {
         yfinanceRequestsFailedCounter.labelValues(ticker, response.code.toString).inc()
-        throw TickerNotFoundException(source, ticker)
+        throw Exception("Ticker not found")
       }
 
       ujson.read(response.body)

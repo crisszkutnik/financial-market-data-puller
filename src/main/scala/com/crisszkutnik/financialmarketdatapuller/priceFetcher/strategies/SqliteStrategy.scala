@@ -110,7 +110,7 @@ object SqliteStrategy:
     val mkt = entry.getString("market")
     val assetType = entry.getString("assetType")
 
-    val fullAssetTypeStatement = preparseAssetTypeStatement(Option(AssetType.valueOf(assetType)))
+    val fullAssetTypeStatement = preparseAssetTypeStatement(Try(AssetType.valueOf(assetType)).toOption)
 
     stmt.executeUpdate(
       s"DELETE FROM prices WHERE market='$mkt' AND ticker='$ticker' AND $fullAssetTypeStatement"

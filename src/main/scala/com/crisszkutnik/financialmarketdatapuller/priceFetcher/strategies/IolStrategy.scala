@@ -2,6 +2,7 @@ package com.crisszkutnik.financialmarketdatapuller.priceFetcher.strategies
 
 import com.crisszkutnik.financialmarketdatapuller.priceFetcher.exceptions.TickerNotFoundException
 import com.crisszkutnik.financialmarketdatapuller.priceFetcher.{AssetType, Currency, Market, Source, TickerPriceInfo}
+import com.typesafe.scalalogging.Logger
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import sttp.client4.quick.*
@@ -10,7 +11,7 @@ import sttp.model.Uri
 
 import scala.util.Try
 
-class IolStrategy extends PriceFetcher:
+class IolStrategy(private val logger: Logger = Logger[IolStrategy]) extends PriceFetcher:
   val source: Source = Source.IOL
 
   def canHandle(market: Market, ticker: String, assetType: AssetType): Boolean =
@@ -22,11 +23,16 @@ class IolStrategy extends PriceFetcher:
 
   // We will assume it is a stock
   def getTickerPriceInfo(market: Market, ticker: String): Try[TickerPriceInfo] = {
-    val doc = getDocument(transformMarket(market), ticker)
+    Try {
+      val doc = getDocument(transformMarket(market), ticker)
 
-    val assetType = if (isArgentinaBond(doc)) AssetType.BOND else AssetType.STOCK
+      if !foundTicker(doc) then
+        throw TickerNotFoundException(source, market, ticker)
 
-    getTickerPriceInfo(market, ticker, assetType, Some(doc))
+      val assetType = if (isArgentinaBond(doc)) AssetType.BOND else AssetType.STOCK
+
+      getTickerPriceInfo(market, ticker, assetType, Some(doc)).get
+    }
   }
 
   def getTickerPriceInfo(market: Market, ticker: String, assetType: AssetType): Try[TickerPriceInfo] =
@@ -42,8 +48,10 @@ class IolStrategy extends PriceFetcher:
           getUnitsForGivenPrice(assetType),
           getCurrency(doc)
         )
-      else
+      else {
+        logger.error(s"Could not find info for $ticker, $market, $assetType")
         throw TickerNotFoundException(source, market, ticker)
+      }
     }
 
   private def foundTicker(doc: Document): Boolean =

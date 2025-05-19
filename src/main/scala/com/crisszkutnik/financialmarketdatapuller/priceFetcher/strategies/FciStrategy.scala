@@ -122,6 +122,7 @@ class FciStrategy(
         val info = readFromSpreadsheet(fciName, f)
 
         if info.isEmpty then
+          logger.error(s"Could not find info for $fciName")
           Failure(TickerNotFoundException(source, fciName))
         else
           Success(info.get)
