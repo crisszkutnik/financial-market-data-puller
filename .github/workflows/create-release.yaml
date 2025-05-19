@@ -26,6 +26,14 @@ jobs:
           distribution: corretto
           java-version: 21
           cache: sbt
+      # Note to whoever reads this in the future. Please update the sbt version
+      # if it is necessary
+      - name: Install SBT
+        run: |
+          curl -L -o sbt.tgz https://github.com/sbt/sbt/releases/download/v1.10.2/sbt-1.10.2.tgz
+          tar -xzf sbt.tgz
+          sudo mv sbt /usr/local/sbt
+          echo "/usr/local/sbt/bin" >> $GITHUB_PATH
       - name: Write Docker tag version
         run: |
           VERSION=${{ github.ref_name }}
