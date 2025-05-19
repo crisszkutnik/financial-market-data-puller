@@ -1,6 +1,7 @@
 package com.crisszkutnik.financialmarketdatapuller.priceFetcher.strategies
 
 import com.crisszkutnik.financialmarketdatapuller.priceFetcher.exceptions.TickerNotFoundException
+import com.crisszkutnik.financialmarketdatapuller.priceFetcher.strategies.YahooFinanceStrategy.yfinanceRequestsFailedCounter
 import com.crisszkutnik.financialmarketdatapuller.priceFetcher.{AssetType, Currency, Market, Source, TickerPriceInfo}
 import com.typesafe.scalalogging.Logger
 import io.prometheus.metrics.core.metrics.Counter
@@ -12,13 +13,6 @@ import scala.util.Try
 class YahooFinanceStrategy(
   private val logger: Logger = Logger[YahooFinanceStrategy]
 ) extends PriceFetcher:
-  private lazy val yfinanceRequestsFailedCounter = Counter
-    .builder()
-    .name("yahoo_finance_requests_failed")
-    .help("Amount of Yahoo Finance requests that fail")
-    .labelNames("ticker", "statusCode")
-    .register()
-
   private val headers: Map[String, String] = Map(
     "User-Agent" -> "PostmanRuntime/7.43.4",
     "Accept" -> "*/*",
@@ -81,3 +75,12 @@ class YahooFinanceStrategy(
     market match
       case Market.BCBA => s"${ticker}.BA"
       case _ => ticker
+
+object YahooFinanceStrategy {
+  private val yfinanceRequestsFailedCounter = Counter
+    .builder()
+    .name("yahoo_finance_requests_failed")
+    .help("Amount of Yahoo Finance requests that fail")
+    .labelNames("ticker", "statusCode")
+    .register()
+}
