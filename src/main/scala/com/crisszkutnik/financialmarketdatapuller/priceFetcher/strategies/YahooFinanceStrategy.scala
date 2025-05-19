@@ -52,7 +52,7 @@ class YahooFinanceStrategy(
         .send()
 
       if response.code != StatusCode.Ok then {
-        yfinanceRequestsFailedCounter.labelValues(ticker, response.code).inc()
+        yfinanceRequestsFailedCounter.labelValues(ticker, response.code.toString).inc()
         throw TickerNotFoundException(source, ticker)
       }
 

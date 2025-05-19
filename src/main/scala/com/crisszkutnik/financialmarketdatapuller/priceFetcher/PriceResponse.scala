@@ -4,7 +4,7 @@ case class PriceResponse(
   value: Double,
   ticker: String,
   market: Market,
-  assetType: AssetType,
+  assetType: Option[AssetType],
   unitsForTickerPrice: Int,
   currency: Currency,
   source: Source

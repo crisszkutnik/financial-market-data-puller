@@ -52,9 +52,7 @@ class AssetPriceService(
             info.value,
             ticker,
             market,
-            // Assume it is a stock
-            // TODO: Undo this
-            AssetType.STOCK,
+            None,
             info.unitsForTickerPrice,
             info.currency,
             source
@@ -92,7 +90,7 @@ class AssetPriceService(
             info.value,
             ticker,
             market,
-            assetType,
+            Some(assetType),
             info.unitsForTickerPrice,
             info.currency,
             source
