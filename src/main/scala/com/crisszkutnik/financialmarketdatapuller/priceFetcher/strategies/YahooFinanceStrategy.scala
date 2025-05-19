@@ -4,7 +4,6 @@ import com.crisszkutnik.financialmarketdatapuller.priceFetcher.exceptions.Ticker
 import com.crisszkutnik.financialmarketdatapuller.priceFetcher.{AssetType, Currency, Market, Source, TickerPriceInfo}
 import com.typesafe.scalalogging.Logger
 import sttp.client4.quick.*
-import sttp.client4.UriContext
 import sttp.model.StatusCode
 
 import scala.util.Try

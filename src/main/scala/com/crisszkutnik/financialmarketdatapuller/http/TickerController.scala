@@ -5,9 +5,13 @@ import com.crisszkutnik.financialmarketdatapuller.priceFetcher.{AssetPriceServic
 import scala.util.Try
 
 trait TickerController[F[_]]:
-  def getBasicTickerValue(market: Market, ticker: String, assetType: AssetType): Try[PriceResponse]
+  def getBasicTickerValue(market: Market, ticker: String, assetType: Option[AssetType]): Try[PriceResponse]
 
 object TickerController:
   def impl[F[_]: Applicative]: TickerController[F] = new TickerController[F]:
-    def getBasicTickerValue(market: Market, ticker: String, assetType: AssetType): Try[PriceResponse] =
-      AssetPriceService().getValue(market, ticker, assetType)
+    def getBasicTickerValue(market: Market, ticker: String, assetType: Option[AssetType]): Try[PriceResponse] = {
+      assetType match {
+        case Some(at: AssetType) => AssetPriceService().getValue(market, ticker, at)
+        case None => AssetPriceService().getValue(market, ticker)
+      }
+    }
