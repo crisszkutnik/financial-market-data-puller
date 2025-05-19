@@ -21,12 +21,20 @@ class IolStrategy extends PriceFetcher:
   def canHandle(market: Market, ticker: String): Boolean = true
 
   // We will assume it is a stock
-  def getTickerPriceInfo(market: Market, ticker: String): Try[TickerPriceInfo] =
-    getTickerPriceInfo(market, ticker, AssetType.STOCK)
+  def getTickerPriceInfo(market: Market, ticker: String): Try[TickerPriceInfo] = {
+    val doc = getDocument(transformMarket(market), ticker)
+
+    val assetType = if (isArgentinaBond(doc)) AssetType.BOND else AssetType.STOCK
+
+    getTickerPriceInfo(market, ticker, assetType, Some(doc))
+  }
 
   def getTickerPriceInfo(market: Market, ticker: String, assetType: AssetType): Try[TickerPriceInfo] =
+    getTickerPriceInfo(market, ticker, assetType, None)
+
+  private def getTickerPriceInfo(market: Market, ticker: String, assetType: AssetType, receivedDoc: Option[Document]): Try[TickerPriceInfo] =
     Try {
-      val doc = getDocument(transformMarket(market), ticker)
+      val doc = receivedDoc.getOrElse(getDocument(transformMarket(market), ticker))
 
       if foundTicker(doc) then
         TickerPriceInfo(
@@ -49,6 +57,15 @@ class IolStrategy extends PriceFetcher:
     } catch
       case e: Exception =>
         throw TickerNotFoundException(source, market, ticker)
+
+  private def isArgentinaBond(doc: Document): Boolean = {
+    val txt = doc
+      .selectFirst("h1.header-title")
+      .ownText()
+      .toLowerCase
+
+    txt.contains("bono") && txt.contains("argentina")
+  }
 
   private def getPrice(doc: Document): Double =
     doc
