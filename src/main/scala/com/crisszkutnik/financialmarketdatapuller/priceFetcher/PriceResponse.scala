@@ -2,6 +2,8 @@ package com.crisszkutnik.financialmarketdatapuller.priceFetcher
 
 case class PriceResponse(
   value: Double,
+  change: Double,
+  changePct: Float,
   ticker: String,
   market: Market,
   assetType: Option[AssetType],
@@ -12,6 +14,8 @@ case class PriceResponse(
 
 case class TickerPriceInfo(
   value: Double,
+  change: Double,
+  changePct: Float,
   unitsForTickerPrice: Int,
   currency: Currency
 )

@@ -47,6 +47,8 @@ object SqliteStrategy:
         |market TEXT NOT NULL,
         |assetType TEXT,
         |value REAL NOT NULL,
+        |change REAL NOT NULL,
+        |changepct REAL NOT NULL,
         |unitsForTickerPrice INTEGER NOT NULL,
         |currency TEXT NOT NULL,
         |updatedAt INTEGER NOT NULL,
@@ -69,7 +71,10 @@ object SqliteStrategy:
       val value = tpi.value
       val uftp = tpi.unitsForTickerPrice
 
-      val query = s"INSERT INTO prices VALUES ('$ticker', '$mkt', $parsedAssetType, $value, $uftp, '$currency', $timestamp)"
+      val change = tpi.change
+      val changePct = tpi.changePct
+
+      val query = s"INSERT INTO prices VALUES ('$ticker', '$mkt', $parsedAssetType, $value, $change, $changePct, $uftp, '$currency', $timestamp)"
 
       stmt.executeUpdate(query)
       ()
@@ -99,6 +104,8 @@ object SqliteStrategy:
         Some(
           TickerPriceInfo(
             rs.getDouble("value"),
+            rs.getDouble("change"),
+            rs.getFloat("changepct"),
             rs.getInt("unitsForTickerPrice"),
             Currency.valueOf(rs.getString("currency"))
           )

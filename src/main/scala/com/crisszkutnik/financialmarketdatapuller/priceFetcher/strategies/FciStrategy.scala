@@ -55,10 +55,16 @@ class FciStrategy(
     else
       val price = row.get.getCell(5).getNumericCellValue
       val currency = row.get.getCell(1).getStringCellValue
+      val lastPrice = row.get.getCell(6).getNumericCellValue
+
+      val change = price - lastPrice
+      val changePct = (price - lastPrice) / lastPrice
 
       Some(
         TickerPriceInfo(
           price,
+          change,
+          changePct.toFloat,
           1000,
           Currency.valueOf(currency)
         )

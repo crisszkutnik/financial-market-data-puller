@@ -33,9 +33,9 @@ class YahooFinanceStrategy(
   def getTickerPriceInfo(market: Market, ticker: String): Try[TickerPriceInfo] =
     Try {
       val actualTicker = transformTicker(market, ticker)
-      val (price, currency) = retrieveData(actualTicker)
+      val (price, currency, change, changePct) = retrieveData(actualTicker)
 
-      TickerPriceInfo(price, 1, currency)
+      TickerPriceInfo(price, change, changePct, 1, currency)
     }
 
   private def retrieveDocument(ticker: String) =
@@ -70,7 +70,12 @@ class YahooFinanceStrategy(
     // TODO: Make currency an optional field
     val enumVal = Try(Currency.valueOf(currency)).getOrElse(Currency.USD)
 
-    (value, enumVal)
+    val previousClose = (((json("chart").obj)("result").arr.head)("meta").obj)("previousClose").num
+
+    val change = value - previousClose;
+    val changePct = (value - previousClose) / previousClose
+
+    (value, enumVal, change, changePct.toFloat)
 
 
   private def transformTicker(market: Market, ticker: String) =

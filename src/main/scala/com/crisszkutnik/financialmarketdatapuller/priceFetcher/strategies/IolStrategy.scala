@@ -31,7 +31,14 @@ class IolStrategy(private val logger: Logger = Logger[IolStrategy]) extends Pric
 
       val assetType = if (isArgentinaBond(doc)) AssetType.BOND else AssetType.STOCK
 
-      getTickerPriceInfo(market, ticker, assetType, Some(doc)).get
+      val result = getTickerPriceInfo(market, ticker, assetType, Some(doc))
+
+      result.failed.foreach { ex =>
+        logger.error(s"Failed to parse document for $market:$ticker")
+        logger.error(ex.toString)
+      }
+
+      result.get
     }
   }
 
@@ -45,6 +52,8 @@ class IolStrategy(private val logger: Logger = Logger[IolStrategy]) extends Pric
       if foundTicker(doc) then
         TickerPriceInfo(
           getPrice(doc),
+          getChange(doc),
+          getChangePct(doc),
           getUnitsForGivenPrice(assetType),
           getCurrency(doc)
         )
@@ -82,6 +91,22 @@ class IolStrategy(private val logger: Logger = Logger[IolStrategy]) extends Pric
       .replace(".", "")
       .replace(",", ".")
       .toDouble
+
+  private def getChange(doc: Document): Double =
+    doc
+      .selectFirst("#variacionUltimoPrecio span[data-field=\"VariacionPuntos\"]")
+      .ownText()
+      .replace(".", "")
+      .replace(",", ".")
+      .toDouble
+
+  private def getChangePct(doc: Document): Float =
+    doc
+      .selectFirst("#variacionUltimoPrecio span[data-field=\"Variacion\"]")
+      .ownText()
+      .replace(".", "")
+      .replace(",", ".")
+      .toFloat / 100
   
   private def getCurrency(doc: Document): Currency =
     doc.selectFirst("#IdTitulo span").ownText() match

@@ -50,6 +50,8 @@ class AssetPriceService(
         Success(
           PriceResponse(
             info.value,
+            info.change,
+            info.changePct,
             ticker,
             market,
             None,
@@ -88,6 +90,8 @@ class AssetPriceService(
         Success(
           PriceResponse(
             info.value,
+            info.change,
+            info.changePct,
             ticker,
             market,
             Some(assetType),
