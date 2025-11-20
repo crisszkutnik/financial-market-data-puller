@@ -4,7 +4,7 @@ import scala.sys.process.*
 val Http4sVersion = "0.23.30"
 val CirceVersion = "0.14.9"
 val MunitVersion = "1.1.1"
-val LogbackVersion = "1.5.18"
+val LogbackVersion = "1.5.21"
 val MunitCatsEffectVersion = "2.1.0"
 
 lazy val buildDockerImage = taskKey[Unit]("Build Docker image for project")
