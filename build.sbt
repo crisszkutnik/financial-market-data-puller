@@ -51,7 +51,7 @@ lazy val root = (project in file("."))
       "io.prometheus" % "prometheus-metrics-instrumentation-jvm" % "1.3.10",
       "io.prometheus" % "prometheus-metrics-exporter-httpserver" % "1.3.10",
     ),
-    libraryDependencies += "org.xerial" % "sqlite-jdbc" % "3.49.1.0",
+    libraryDependencies += "org.xerial" % "sqlite-jdbc" % "3.51.0.0",
     assembly / assemblyMergeStrategy := {
       case PathList("META-INF", x, xs @ _*) if x.toLowerCase == "services" => MergeStrategy.filterDistinctLines
       case PathList("META-INF", xs @ _*) => MergeStrategy.discard
