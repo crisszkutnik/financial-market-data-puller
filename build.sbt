@@ -38,9 +38,9 @@ lazy val root = (project in file("."))
     libraryDependencies += "org.apache.logging.log4j" % "log4j-core" % "2.24.3",
     libraryDependencies += "com.lihaoyi" %% "upickle" % "4.2.1",
     libraryDependencies ++= Seq(
-      "org.apache.poi" % "poi" % "5.4.1",
-      "org.apache.poi" % "poi-ooxml" % "5.4.1",
-      "org.apache.poi" % "poi-ooxml-lite" % "5.4.1"
+      "org.apache.poi" % "poi" % "5.5.0",
+      "org.apache.poi" % "poi-ooxml" % "5.5.0",
+      "org.apache.poi" % "poi-ooxml-lite" % "5.5.0"
     ),
     libraryDependencies ++= Seq(
       "io.circe" %% "circe-generic" % "0.14.15",
