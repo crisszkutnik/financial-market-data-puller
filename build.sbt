@@ -33,7 +33,7 @@ lazy val root = (project in file("."))
       "ch.qos.logback"  %  "logback-classic"     % LogbackVersion         % Runtime,
     ),
     libraryDependencies += "com.softwaremill.sttp.client4" %% "core" % "4.0.13",
-    libraryDependencies += "org.jsoup" % "jsoup" % "1.20.1",
+    libraryDependencies += "org.jsoup" % "jsoup" % "1.21.2",
     libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.6",
     libraryDependencies += "org.apache.logging.log4j" % "log4j-core" % "2.24.3",
     libraryDependencies += "com.lihaoyi" %% "upickle" % "4.2.1",
