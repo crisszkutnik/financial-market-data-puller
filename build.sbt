@@ -35,7 +35,7 @@ lazy val root = (project in file("."))
     libraryDependencies += "com.softwaremill.sttp.client4" %% "core" % "4.0.13",
     libraryDependencies += "org.jsoup" % "jsoup" % "1.20.1",
     libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.6",
-    libraryDependencies += "org.apache.logging.log4j" % "log4j-core" % "2.24.3",
+    libraryDependencies += "org.apache.logging.log4j" % "log4j-core" % "2.25.2",
     libraryDependencies += "com.lihaoyi" %% "upickle" % "4.2.1",
     libraryDependencies ++= Seq(
       "org.apache.poi" % "poi" % "5.4.1",
