@@ -22,7 +22,7 @@ lazy val root = (project in file("."))
     organization := "com.crisszkutnik",
     name := "financial-market-data-puller",
     version := "0.0.1-SNAPSHOT",
-    scalaVersion := "3.3.7",
+    scalaVersion := "3.7.4",
     libraryDependencies ++= Seq(
       "org.http4s"      %% "http4s-ember-server" % Http4sVersion,
       "org.http4s"      %% "http4s-ember-client" % Http4sVersion,
